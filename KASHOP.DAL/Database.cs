@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KASHOP.DAL
 {
-    internal class Database
+    public class Database
     {
     }
 }

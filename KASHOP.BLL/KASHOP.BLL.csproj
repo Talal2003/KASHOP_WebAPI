@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KASHOP.DAL\KASHOP.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
