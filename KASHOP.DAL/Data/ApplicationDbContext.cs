@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace KASHOP.DAL
+namespace KASHOP.DAL.Data
 {
     public class ApplicationDbContext : DbContext
     {
