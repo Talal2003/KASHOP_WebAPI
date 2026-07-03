@@ -36,10 +36,7 @@ namespace KASHOP.PL
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
                 options.RequestCultureProviders.Clear();
-                options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider
-                {
-                    QueryStringKey="lang"
-                });
+                options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
             });
 
             var app = builder.Build();
