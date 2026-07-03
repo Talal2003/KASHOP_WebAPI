@@ -3,8 +3,11 @@ using KASHOP.DAL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mapster;
 using System.Text;
 using System.Threading.Tasks;
+using KASHOP.DAL.Models;
+using Azure;
 
 namespace KASHOP.BLL.Services
 {
@@ -16,10 +19,21 @@ namespace KASHOP.BLL.Services
         {
             _categoryRepository = categoryRepository;
         }
-        public List<CategoryResponse> GetALlCategories()
+        public async Task<CategoryResponse> CreateCategory(CategoryRequest request)
         {
-            var categories = _categoryRepository.GetAll();
-            var response =categories.Adapt
+            var category = request.Adapt<Category>();
+            await _categoryRepository.CreateAsync(category);
+
+            var response = category.Adapt<CategoryResponse>();
+
+            return response;
+        }
+        public async Task<List<CategoryResponse>> GetALlCategories()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+            var response = categories.Adapt<List<CategoryResponse>>();
+
+            return response;
         }
     }
 }
