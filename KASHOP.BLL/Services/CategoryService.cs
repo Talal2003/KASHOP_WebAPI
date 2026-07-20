@@ -1,13 +1,14 @@
-﻿using KASHOP.DAL.Dto;
+﻿using Azure;
+using KASHOP.DAL.Dto;
+using KASHOP.DAL.Models;
 using KASHOP.DAL.Repository;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mapster;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using KASHOP.DAL.Models;
-using Azure;
 
 namespace KASHOP.BLL.Services
 {
@@ -19,21 +20,32 @@ namespace KASHOP.BLL.Services
         {
             _categoryRepository = categoryRepository;
         }
+        public async Task<List<CategoryResponse>> GetALlCategories()
+        {
+            var categories = await _categoryRepository.GetAllAsync(
+                new string[] { nameof(Category.Translations) }
+                );
+
+            return categories.Adapt<List<CategoryResponse>>();
+        }
+        public async Task<CategoryResponse> GetCategory(Expression<Func<Category, bool>> filter)
+        {
+            var category = await _categoryRepository.GetOne(filter, new string[] { nameof(Category.Translations) });
+            return category.Adapt<CategoryResponse>();
+        }
         public async Task<CategoryResponse> CreateCategory(CategoryRequest request)
         {
             var category = request.Adapt<Category>();
             await _categoryRepository.CreateAsync(category);
 
-            var response = category.Adapt<CategoryResponse>();
-
-            return response;
+            return category.Adapt<CategoryResponse>();
         }
-        public async Task<List<CategoryResponse>> GetALlCategories()
+        public async Task<bool> DeleteCategory(int id)
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            var response = categories.Adapt<List<CategoryResponse>>();
+            var category = await _categoryRepository.GetOne(c => c.Id == id);
+            if (category == null) return false;
 
-            return response;
+            return await _categoryRepository.DeleteAsync(category);
         }
     }
 }
