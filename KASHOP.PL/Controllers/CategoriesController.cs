@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Azure.Core;
 using KASHOP.BLL.Services;
 using KASHOP.DAL.Data;
 using KASHOP.DAL.Dto;
@@ -53,6 +54,15 @@ namespace KASHOP.PL.Controllers
                 return BadRequest();
 
             return Ok();
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(CategoryRequest request, int id)
+        {
+            var updated = await _categoryService.UpdateCategory(request, id);
+            if (updated == null)
+                return BadRequest();
+
+            return Ok(updated);
         }
     }
 }

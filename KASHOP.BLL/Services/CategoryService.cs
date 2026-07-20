@@ -47,5 +47,15 @@ namespace KASHOP.BLL.Services
 
             return await _categoryRepository.DeleteAsync(category);
         }
+        public async Task<CategoryResponse> UpdateCategory(CategoryRequest request, int id)
+        {
+            var category = await _categoryRepository.GetOne(c => c.Id == id);
+            if (category == null) return null;
+
+            request.Adapt(category);
+            await _categoryRepository.UpdateAsync(category);
+
+            return category.Adapt<CategoryResponse>();
+        }
     }
 }
