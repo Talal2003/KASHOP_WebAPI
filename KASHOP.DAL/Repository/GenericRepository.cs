@@ -1,38 +1,44 @@
-﻿using KASHOP.DAL.Data;
+﻿using Azure.Core;
+using KASHOP.DAL.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace KASHOP.DAL.Repository
 {
-    public class GenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        ApplicationDbContext context = new ApplicationDbContext();
+        private readonly ApplicationDbContext _context;
 
-        public void Create(T entity)
+        public GenericRepository(ApplicationDbContext context)
         {
-            context.Set<T>().Add(entity);
-            context.SaveChanges();
+            _context = context;
         }
-        public void Update(T entity)
+
+        public void Create(T request)
         {
-            context.Set<T>().Update(entity);
-            context.SaveChanges();
+            _context.Set<T>().Add(request);
+            _context.SaveChanges();
+        }
+        public void Update(T request, int id)
+        {
+            _context.Set<T>().Update(request);
+            _context.SaveChanges();
         }
         public void Remove(int id)
         {
-            var entity = context.Set<T>().Find(id);
-            context.Set<T>().Remove(entity);
-            context.SaveChanges();
+            var entity = _context.Set<T>().Find(id);
+            _context.Set<T>().Remove(entity);
+            _context.SaveChanges();
         }
         public List<T> GetAll()
         {
-            var entities = context.Set<T>().ToList();
+            var entities = _context.Set<T>().ToList();
             return entities;
         }
         public T GetById(int id)
         {
-            var entity = context.Set<T>().Find(id);
+            var entity = _context.Set<T>().Find(id);
             return entity;
         }
     }
