@@ -1,5 +1,4 @@
-﻿using KASHOP.DAL.Models;
-using KASHOP.DAL.Repository;
+﻿using KASHOP.BLL.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,44 +8,44 @@ namespace KASHOP.PL.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly GenericRepository<Category> _repository;
-        public CategoriesController(GenericRepository<Category> repo)
+        private readonly ICategoryService _service;
+        public CategoriesController(ICategoryService service)
         {
-            _repository = repo;
+            _service = service;
         }
 
-        [HttpPost("")]
-        public IActionResult AddCategory(Category category)
-        {
-            _repository.Create(category);
-            return Ok();
-        }
+        //[HttpPost("")]
+        //public IActionResult AddCategory(Category category)
+        //{
+        //    _service.Create(category);
+        //    return Ok();
+        //}
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateCategory(Category category, int id)
-        {
-            _repository.Update(category, id);
-            return Ok();
-        }
+        //[HttpPut("{id}")]
+        //public IActionResult UpdateCategory(Category category, int id)
+        //{
+        //    _service.Update(category, id);
+        //    return Ok();
+        //}
 
         [HttpDelete("{id}")]
         public IActionResult RemoveCategory(int id)
         {
-            _repository.Remove(id);
+            _service.Delete(id);
             return Ok();
         }
 
         [HttpGet("")]
         public IActionResult GetAllCategories()
         {
-            var categories = _repository.GetAll();
+            var categories = _service.GetAll();
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
         {
-            var category = _repository.GetById(id);
+            var category = _service.GetById(id);
             return Ok(category);
         }
     }

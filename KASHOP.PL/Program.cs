@@ -1,4 +1,5 @@
 
+using KASHOP.BLL.Services;
 using KASHOP.DAL.Data;
 using KASHOP.DAL.Models;
 using KASHOP.DAL.Repository;
@@ -21,7 +22,11 @@ namespace KASHOP.PL
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
 
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+
             builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
+
+            builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
 
             var app = builder.Build();
 

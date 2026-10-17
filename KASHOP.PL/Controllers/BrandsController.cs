@@ -9,8 +9,8 @@ namespace KASHOP.PL.Controllers
     [ApiController]
     public class BrandsController : ControllerBase
     {
-        private readonly GenericRepository<Brand> _repository;
-        public BrandsController(GenericRepository<Brand> repository)
+        private readonly IGenericRepository<Brand> _repository;
+        public BrandsController(IGenericRepository<Brand> repository)
         {
             _repository = repository;
         }
