@@ -16,40 +16,48 @@ namespace KASHOP.BLL.Services
         {
             _repo = repo;
         } 
-        public bool Create(CategoryRequest request)
+        public async Task<bool> CreateAsync(CategoryRequest request)
         {
-            var exists = _repo.GetAll().Any(c=>c.Name.ToLower() == request.Name.ToLower());
+            var categories = await _repo.GetAllAsync();
+            var exists = categories.Any(c=>c.Name.ToLower() == request.Name.ToLower());
             if (exists) return false;
 
             var category = request.Adapt<Category>();
-            _repo.Create(category);
+            await _repo.CreateAsync(category);
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var exists = _repo.GetAll().Any(c => c.Id == id);
+            var categories = await _repo.GetAllAsync();
+            var exists = categories.Any(c => c.Id == id);
             if (!exists) return false;
 
-            _repo.Remove(id);
+            await _repo.RemoveAsync(id);
             return true;
         }
 
-        public List<CategoryResponse> GetAll()
+        public async Task<List<CategoryResponse>> GetAllAsync()
         {
-            var categories = _repo.GetAll();
+            var categories = await _repo.GetAllAsync();
             return categories.Adapt<List<CategoryResponse>>();
         }
 
-        public CategoryResponse? GetById(int id)
+        public async Task<CategoryResponse?> GetByIdAsync(int id)
         {
-            var category = _repo.GetById(id);
+            var category = await _repo.GetByIdAsync(id);
             return category.Adapt<CategoryResponse>();
         }
 
-        public bool Update(int id, CategoryRequest request)
+        public async Task<bool> UpdateAsync(CategoryRequest request, int id)
         {
-            throw new NotImplementedException();
+            var categories = await _repo.GetAllAsync();
+            var exists = categories.Any(c => c.Id == id);
+            if (!exists) return false;
+
+            var category = request.Adapt<Category>();
+            await _repo.UpdateAsync(category, id);
+            return true;
         }
     }
 }

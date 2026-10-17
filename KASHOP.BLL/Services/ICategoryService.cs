@@ -8,10 +8,10 @@ namespace KASHOP.BLL.Services
 {
     public interface ICategoryService
     {
-        List<CategoryResponse> GetAll();
-        CategoryResponse? GetById(int id);
-        bool Create(CategoryRequest request);
-        bool Update(int id, CategoryRequest request);
-        bool Delete(int id);
+        Task<List<CategoryResponse>> GetAllAsync();
+        Task<CategoryResponse?> GetByIdAsync(int id);
+        Task<bool> CreateAsync(CategoryRequest request);
+        Task<bool> UpdateAsync(CategoryRequest request, int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

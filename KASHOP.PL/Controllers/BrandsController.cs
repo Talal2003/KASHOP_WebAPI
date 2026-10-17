@@ -16,30 +16,30 @@ namespace KASHOP.PL.Controllers
         }
 
         [HttpPost("")]
-        public IActionResult AddBrand(Brand brand)
+        public async Task<IActionResult> AddBrandAsync(Brand brand)
         {
-            _repository.Create(brand);
+            await _repository.CreateAsync(brand);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult RemoveBrand(int id)
+        public async Task<IActionResult> RemoveBrandAsync(int id)
         {
-            _repository.Remove(id);
+            await _repository.RemoveAsync(id);
             return Ok();
         }
 
         [HttpGet("")]
-        public IActionResult GetAllBrands()
+        public async Task<IActionResult> GetAllBrandsAsync()
         {
-            var brands = _repository.GetAll();
+            var brands = await _repository.GetAllAsync();
             return Ok(brands);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetBrandById(int id)
+        public async Task<IActionResult> GetBrandByIdAsync(int id)
         {
-            var brand = _repository.GetById(id);
+            var brand = await _repository.GetByIdAsync(id);
             return Ok(brand);
         }
     }

@@ -15,37 +15,37 @@ namespace KASHOP.PL.Controllers
         }
 
         //[HttpPost("")]
-        //public IActionResult AddCategory(Category category)
+        //public async Task<IActionResult> AddCategoryAsync(Category category)
         //{
-        //    _service.Create(category);
+        //    await _service.CreateAsync(category);
         //    return Ok();
         //}
 
         //[HttpPut("{id}")]
-        //public IActionResult UpdateCategory(Category category, int id)
+        //public async Task<IActionResult> UpdateCategoryAsync(Category category, int id)
         //{
-        //    _service.Update(category, id);
+        //    await _service.UpdateAsync(category, id);
         //    return Ok();
         //}
 
         [HttpDelete("{id}")]
-        public IActionResult RemoveCategory(int id)
+        public async Task<IActionResult> RemoveCategoryAsync(int id)
         {
-            _service.Delete(id);
+            await _service.DeleteAsync(id);
             return Ok();
         }
 
         [HttpGet("")]
-        public IActionResult GetAllCategories()
+        public async Task<IActionResult> GetAllCategoriesAsync()
         {
-            var categories = _service.GetAll();
+            var categories = await _service.GetAllAsync();
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCategoryById(int id)
+        public async Task<IActionResult> GetCategoryByIdAsync(int id)
         {
-            var category = _service.GetById(id);
+            var category = await _service.GetByIdAsync(id);
             return Ok(category);
         }
     }
