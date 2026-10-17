@@ -16,30 +16,37 @@ namespace KASHOP.PL.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> AddBrandAsync(Brand brand)
+        public async Task<IActionResult> AddBrandAsync(Brand brand, CancellationToken cancellationToken = default)
         {
-            await _repository.CreateAsync(brand);
+            await _repository.CreateAsync(brand, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBrandAsync(Brand brand, int id, CancellationToken cancellationToken = default)
+        {
+            await _repository.UpdateAsync(brand, id, cancellationToken);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveBrandAsync(int id)
+        public async Task<IActionResult> RemoveBrandAsync(int id, CancellationToken cancellationToken = default)
         {
-            await _repository.RemoveAsync(id);
+            await _repository.RemoveAsync(id, cancellationToken);
             return Ok();
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAllBrandsAsync()
+        public async Task<IActionResult> GetAllBrandsAsync(CancellationToken cancellationToken = default)
         {
-            var brands = await _repository.GetAllAsync();
+            var brands = await _repository.GetAllAsync(cancellationToken);
             return Ok(brands);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBrandByIdAsync(int id)
+        public async Task<IActionResult> GetBrandByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var brand = await _repository.GetByIdAsync(id);
+            var brand = await _repository.GetByIdAsync(id, cancellationToken);
             return Ok(brand);
         }
     }

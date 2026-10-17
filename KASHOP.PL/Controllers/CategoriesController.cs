@@ -15,37 +15,37 @@ namespace KASHOP.PL.Controllers
         }
 
         //[HttpPost("")]
-        //public async Task<IActionResult> AddCategoryAsync(Category category)
+        //public async Task<IActionResult> AddCategoryAsync(Category category, CancellationToken cancellationToken = default)
         //{
-        //    await _service.CreateAsync(category);
+        //    await _service.CreateAsync(category, cancellationToken);
         //    return Ok();
         //}
 
         //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateCategoryAsync(Category category, int id)
+        //public async Task<IActionResult> UpdateCategoryAsync(Category category, int id, CancellationToken cancellationToken = default)
         //{
-        //    await _service.UpdateAsync(category, id);
+        //    await _service.UpdateAsync(category, id, cancellationToken);
         //    return Ok();
         //}
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveCategoryAsync(int id)
+        public async Task<IActionResult> RemoveCategoryAsync(int id, CancellationToken cancellationToken = default)
         {
-            await _service.DeleteAsync(id);
+            await _service.DeleteAsync(id, cancellationToken);
             return Ok();
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAllCategoriesAsync()
+        public async Task<IActionResult> GetAllCategoriesAsync(CancellationToken cancellationToken = default)
         {
-            var categories = await _service.GetAllAsync();
+            var categories = await _service.GetAllAsync(cancellationToken);
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryByIdAsync(int id)
+        public async Task<IActionResult> GetCategoryByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var category = await _service.GetByIdAsync(id);
+            var category = await _service.GetByIdAsync(id, cancellationToken);
             return Ok(category);
         }
     }

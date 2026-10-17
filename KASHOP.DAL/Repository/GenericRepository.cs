@@ -16,30 +16,30 @@ namespace KASHOP.DAL.Repository
             _context = context;
         }
 
-        public async Task CreateAsync(T request)
+        public async Task CreateAsync(T request, CancellationToken cancellationToken = default)
         {
-            await _context.Set<T>().AddAsync(request);
-            await _context.SaveChangesAsync();
+            await _context.Set<T>().AddAsync(request, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
-        public async Task UpdateAsync(T request, int id)
+        public async Task UpdateAsync(T request, int id, CancellationToken cancellationToken = default)
         {
             _context.Set<T>().Update(request);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
-        public async Task RemoveAsync(int id)
+        public async Task RemoveAsync(int id, CancellationToken cancellationToken = default)
         {
             var entity = _context.Set<T>().Find(id);
             _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var entities = await _context.Set<T>().AsNoTracking().ToListAsync();
+            var entities = await _context.Set<T>().AsNoTracking().ToListAsync(cancellationToken);
             return entities;
         }
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var entity = await _context.Set<T>().FindAsync(id);
+            var entity = await _context.Set<T>().FindAsync(id, cancellationToken);
             return entity;
         }
     }
