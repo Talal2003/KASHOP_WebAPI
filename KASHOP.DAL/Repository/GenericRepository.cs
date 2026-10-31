@@ -3,6 +3,7 @@ using KASHOP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace KASHOP.DAL.Repository
@@ -32,10 +33,27 @@ namespace KASHOP.DAL.Repository
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync(cancellationToken);
         }
-        public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,
+            List<Expression<Func<T, object>>>? includes = null,
+            bool tracked = false,
+            CancellationToken cancellationToken = default)
         {
-            var entities = await _context.Set<T>().AsNoTracking().ToListAsync(cancellationToken);
-            return entities;
+            IQueryable<T> query = _context.Set<T>().AsQueryable();
+            if (!tracked)
+                query = query.AsNoTracking();
+
+            if (filter is not null)
+                query = query.Where(filter);
+
+            if (includes is not null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.ToListAsync();
         }
         public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
