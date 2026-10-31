@@ -36,17 +36,10 @@ namespace KASHOP.PL.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAllCategoriesAsync(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetCategoriesAsync(CancellationToken cancellationToken = default)
         {
             var categories = await _service.GetAllAsync(cancellationToken);
             return Ok(categories);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryByIdAsync(int id, CancellationToken cancellationToken = default)
-        {
-            var category = await _service.GetByIdAsync(id, cancellationToken);
-            return Ok(category);
         }
     }
 }
