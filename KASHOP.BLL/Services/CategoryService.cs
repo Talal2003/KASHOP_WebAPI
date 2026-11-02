@@ -31,6 +31,7 @@ namespace KASHOP.BLL.Services
 
             var category = request.Adapt<Category>();
             await _repo.CreateAsync(category, cancellationToken);
+
             return true;
         }
 
@@ -44,6 +45,7 @@ namespace KASHOP.BLL.Services
             if (category is null) return false;
 
             await _repo.RemoveAsync(id, cancellationToken);
+
             return true;
         }
 
@@ -70,12 +72,21 @@ namespace KASHOP.BLL.Services
 
         public async Task<bool> UpdateAsync(CategoryRequest request, int id, CancellationToken cancellationToken = default)
         {
-            var categories = await _repo.GetAsync(cancellationToken:cancellationToken);
-            var exists = categories.Any(c => c.Id == id);
-            if (!exists) return false;
+            if (!AreTranslationsValid(request.Translations)) return false;
+
+            var names = request.Translations.Select(t => t.Name.ToLower()).ToList();
+
+            var existing = await _repo.GetOneAsync(
+                filter: c => c.Id != id &&
+                    c.Translations.Any(t => names.Contains(t.Name.ToLower())),
+                cancellationToken: cancellationToken
+                );
+
+            if (existing is null) return false;
 
             var category = request.Adapt<Category>();
             await _repo.UpdateAsync(category, id, cancellationToken);
+
             return true;
         }
 

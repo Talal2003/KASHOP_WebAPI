@@ -1,6 +1,7 @@
 ﻿using KASHOP.BLL.Services;
 using KASHOP.DAL.DTO.Requests;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KASHOP.PL.Controllers
@@ -16,21 +17,21 @@ namespace KASHOP.PL.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Create(CategoryRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(CategoryRequest request, CancellationToken cancellationToken = default)
         {
             var result = await _service.CreateAsync(request, cancellationToken);
-            return result ? Ok() : BadRequest();
+            return result ? NoContent() : BadRequest();
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateCategoryAsync(Category category, int id, CancellationToken cancellationToken = default)
-        //{
-        //    await _service.UpdateAsync(category, id, cancellationToken);
-        //    return Ok();
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(CategoryRequest request, int id, CancellationToken cancellationToken = default)
+        {
+            var result = await _service.UpdateAsync(request, id, cancellationToken);
+            return result ? NoContent() : BadRequest();
+        }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.DeleteAsync(id, cancellationToken);
             return result ? NoContent() : BadRequest();
@@ -39,12 +40,12 @@ namespace KASHOP.PL.Controllers
         [HttpGet("")]
         public async Task<IActionResult> GetCategoriesAsync(CancellationToken cancellationToken = default)
         {
-            var categories = await _service.GetAllAsync(cancellationToken);
-            return Ok(categories);
+            var result = await _service.GetAllAsync(cancellationToken);
+            return result is not null ? Ok(result) : BadRequest();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.GetByIdAsync(id, cancellationToken);
             return result is not null ? Ok(result) : BadRequest();
