@@ -4,7 +4,9 @@ using System.Text;
 
 namespace KASHOP.BLL.Settings
 {
-    internal class SupportedLanguages
+    public static class SupportedLanguages
     {
+        public const string Default = "en";
+        public static readonly string[] Languages = { "en", "ar" };
     }
 }

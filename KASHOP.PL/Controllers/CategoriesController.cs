@@ -1,4 +1,5 @@
 ﻿using KASHOP.BLL.Services;
+using KASHOP.DAL.DTO.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +15,12 @@ namespace KASHOP.PL.Controllers
             _service = service;
         }
 
-        //[HttpPost("")]
-        //public async Task<IActionResult> AddCategoryAsync(Category category, CancellationToken cancellationToken = default)
-        //{
-        //    await _service.CreateAsync(category, cancellationToken);
-        //    return Ok();
-        //}
+        [HttpPost("")]
+        public async Task<IActionResult> Create(CategoryRequest request, CancellationToken cancellationToken = default)
+        {
+            var result = await _service.CreateAsync(request, cancellationToken);
+            return result ? Ok() : BadRequest();
+        }
 
         //[HttpPut("{id}")]
         //public async Task<IActionResult> UpdateCategoryAsync(Category category, int id, CancellationToken cancellationToken = default)
@@ -29,10 +30,10 @@ namespace KASHOP.PL.Controllers
         //}
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveCategoryAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
-            await _service.DeleteAsync(id, cancellationToken);
-            return Ok();
+            var result = await _service.DeleteAsync(id, cancellationToken);
+            return result ? NoContent() : BadRequest();
         }
 
         [HttpGet("")]
@@ -40,6 +41,13 @@ namespace KASHOP.PL.Controllers
         {
             var categories = await _service.GetAllAsync(cancellationToken);
             return Ok(categories);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
+        {
+            var result = await _service.GetByIdAsync(id, cancellationToken);
+            return result is not null ? Ok(result) : BadRequest();
         }
     }
 }

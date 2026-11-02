@@ -4,7 +4,9 @@ using System.Text;
 
 namespace KASHOP.DAL.DTO.Requests
 {
-    internal class CategoryTranslationRequest
+    public class CategoryTranslationRequest
     {
+        public string Name { get; set; } = null!;
+        public string Language { get; set; } = null!;
     }
 }

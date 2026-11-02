@@ -64,9 +64,6 @@ namespace KASHOP.DAL.Repository
             if (!tracked)
                 query = query.AsNoTracking();
 
-            if (filter is not null)
-                query = query.Where(filter);
-
             if (includes is not null)
             {
                 foreach (var include in includes)

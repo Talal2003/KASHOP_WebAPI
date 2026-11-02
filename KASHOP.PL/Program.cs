@@ -1,9 +1,13 @@
 
 using KASHOP.BLL.Services;
+using KASHOP.BLL.Settings;
 using KASHOP.DAL.Data;
 using KASHOP.DAL.Models;
 using KASHOP.DAL.Repository;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 namespace KASHOP.PL
 {
@@ -19,6 +23,17 @@ namespace KASHOP.PL
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.Configure<RequestLocalizationOptions>(options => {
+                options.SetDefaultCulture(SupportedLanguages.Default);
+                options.AddSupportedCultures(SupportedLanguages.Languages);
+                options.AddSupportedUICultures(SupportedLanguages.Languages);
+                options.RequestCultureProviders = new List<IRequestCultureProvider> 
+                {
+                    new AcceptLanguageHeaderRequestCultureProvider(),
+                    new QueryStringRequestCultureProvider()
+                };
+            });
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
 
@@ -28,7 +43,10 @@ namespace KASHOP.PL
 
             builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
 
+            MapsterConfig.RegisterMappings();
+
             var app = builder.Build();
+            app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
