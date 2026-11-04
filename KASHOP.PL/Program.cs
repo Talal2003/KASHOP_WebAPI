@@ -37,11 +37,12 @@ namespace KASHOP.PL
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
 
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-
             builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
-
+            builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
             builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             MapsterConfig.RegisterMappings();
 
@@ -57,6 +58,7 @@ namespace KASHOP.PL
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseStaticFiles();
 
 
             app.MapControllers();
