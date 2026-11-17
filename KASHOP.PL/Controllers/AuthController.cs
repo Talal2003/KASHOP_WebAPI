@@ -28,7 +28,7 @@ namespace KASHOP.PL.Controllers
         {
             var (success, error, response) = await _authService.LoginAsync(login);
 
-            return success ? Ok() : BadRequest(new { error });
+            return success ? Ok(response) : BadRequest(new { error });
         }
     }
 }
