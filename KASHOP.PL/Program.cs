@@ -46,9 +46,10 @@ namespace KASHOP.PL
                 options.Password.RequireUppercase = true; // A-Z
                 options.Password.RequireLowercase = true; // a-z
                 options.Password.RequireNonAlphanumeric = true; // @, $, #, !
-
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.AllowedForNewUsers = true;
+                options.SignIn.RequireConfirmedEmail = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();

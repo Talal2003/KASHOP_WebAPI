@@ -18,11 +18,14 @@ namespace KASHOP.BLL.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly SignInManager<ApplicationUser> _signinManager;
 
-        public AuthService(UserManager<ApplicationUser> userManager, ITokenService tokenService)
+        public AuthService(UserManager<ApplicationUser> userManager, ITokenService tokenService,
+            SignInManager<ApplicationUser> signinManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signinManager = signinManager;
         }
         public async Task<(bool Success, List<string> Error)> RegisterAsync(RegisterRequest request)
         {
@@ -43,9 +46,15 @@ namespace KASHOP.BLL.Services
             if (user is null)
                 return (false, ["invalid email or password"], null);
 
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+            var result = await _signinManager.CheckPasswordSignInAsync(user, request.Password, true);
 
-            if (!isPasswordValid)
+            if(result.IsNotAllowed)
+                return (false, ["Confirm your email"], null);
+
+            if (result.IsLockedOut)
+                return (false, ["Account is locked, try again later"], null);
+
+            if (!result.Succeeded)
                 return (false, ["invalid email or password"], null);
 
             var token = await _tokenService.GenerateJwt(user);
