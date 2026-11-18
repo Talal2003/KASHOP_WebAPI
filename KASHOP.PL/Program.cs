@@ -79,6 +79,7 @@ namespace KASHOP.PL
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ISeedData, RoleSeedData>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));

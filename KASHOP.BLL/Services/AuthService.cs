@@ -17,12 +17,12 @@ namespace KASHOP.BLL.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _tokenService = tokenService;
         }
         public async Task<(bool Success, List<string> Error)> RegisterAsync(RegisterRequest request)
         {
@@ -48,38 +48,13 @@ namespace KASHOP.BLL.Services
             if (!isPasswordValid)
                 return (false, ["invalid email or password"], null);
 
-            var token = await GenerateJwt(user);
+            var token = await _tokenService.GenerateJwt(user);
             var response = new LoginResponse()
             {
                 Token = token
             };
 
             return (true, [], response);
-        }
-
-        public async Task<string> GenerateJwt(ApplicationUser user)
-        {
-            var roles = await _userManager.GetRolesAsync(user);
-            var userClaims = new List<Claim>()
-            {
-                new Claim("Id", user.Id),
-                new Claim("UserName", user.UserName),
-                new Claim("Email", user.Email),
-                new Claim("Role", string.Join(",", roles))
-            };
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: userClaims,
-                expires: DateTime.Now.AddDays(5),
-                signingCredentials: credentials
-                );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
