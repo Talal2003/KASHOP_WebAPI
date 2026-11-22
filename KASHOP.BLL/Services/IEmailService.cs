@@ -4,7 +4,8 @@ using System.Text;
 
 namespace KASHOP.BLL.Services
 {
-    internal interface IEmailService
+    public interface IEmailService
     {
+        Task SendEmailAsync(string to, string subject, string htmlBody);
     }
 }

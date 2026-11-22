@@ -10,5 +10,6 @@ namespace KASHOP.BLL.Services
     {
         Task<(bool Success, List<string> Error)> RegisterAsync(RegisterRequest request);
         Task<(bool Success, List<string> Error, LoginResponse response)> LoginAsync(LoginRequest request);
+        Task<(bool Success, string? Error)> ConfirmEmailAsync(string userId, string token);
     }
 }
